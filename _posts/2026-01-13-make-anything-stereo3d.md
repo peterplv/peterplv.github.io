@@ -206,12 +206,12 @@ torch.cuda.empty_cache()
 <br>
 
 We get a depth map:
-![C-3PO and R2-D2 depth map](/assets/images/2026-01-13-make-anything-stereo3d/starwars4_c3po_r2d2_depth_grey.png)
+![C-3PO and R2-D2 depth map](/assets/images/2026-01-13-make-anything-stereo3d/starwars4_c3po_r2d2_depth_grey.jpg)
 *Depth map, the lighter the object, the closer it is*
 <br>
 <br>
 Or a colorized version of the depth map, for clarity (it won't be needed for our task):
-![C-3PO and R2-D2 depth map color](/assets/images/2026-01-13-make-anything-stereo3d/starwars4_c3po_r2d2_depth_color.png)
+![C-3PO and R2-D2 depth map color](/assets/images/2026-01-13-make-anything-stereo3d/starwars4_c3po_r2d2_depth_color.jpg)
 *Color depth map, from dark red (closer) to dark blue (farther)*
 <br>
 <br>
