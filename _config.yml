@@ -1,0 +1,15 @@
+title: peterplv
+description: My name is Peter. I work in AI and write about it.
+
+baseurl: ""
+url: "https://peterplv.github.io"
+
+github_username:  peterplv
+
+timezone: Europe/Moscow
+permalink: /:categories/:year/:month/:day/:title
+
+theme: minima
+
+#plugins:
+#  - jekyll-redirect-from
