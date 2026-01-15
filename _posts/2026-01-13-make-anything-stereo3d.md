@@ -927,8 +927,7 @@ I have already watched the original Star Wars trilogy (episodes 4, 5, 6) in 3D. 
 <br>
 <br>
 ## Additional materials
-- Next article with the [new script and alternative solutions]
-(https://peterplv.github.io/2026/01/15/stereo3d-script)
+- Next article with the [new script and alternative solutions](https://peterplv.github.io/2026/01/15/stereo3d-script)
 - Scripts from the article are available on my GitHub:  
 [https://github.com/peterplv/MakeAnythingStereo3D](https://github.com/peterplv/MakeAnythingStereo3D)
 - Link to a Google Drive with [examples and 3D GIFs](https://drive.google.com/drive/folders/1ovCMNJG-FLJcuOfE0Y-zuBsewUKpy_fy?usp=sharing)
