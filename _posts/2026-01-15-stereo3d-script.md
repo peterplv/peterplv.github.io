@@ -449,7 +449,7 @@ That's all, may the force be with you!
 <br>
 <br>
 ## Additional materials
-- See [the main article](https://peterplv.github.io/2026/01/13/make-anything-stereo3d) for all key details
+- See the [main article](https://peterplv.github.io/2026/01/13/make-anything-stereo3d) for all key details
 - All 2D to 3D conversion scripts are available on my GitHub:  
 [https://github.com/peterplv/MakeAnythingStereo3D](https://github.com/peterplv/MakeAnythingStereo3D)
 - Link to a Google Drive with [examples and 3D GIFs](https://drive.google.com/drive/folders/1ovCMNJG-FLJcuOfE0Y-zuBsewUKpy_fy?usp=sharing)

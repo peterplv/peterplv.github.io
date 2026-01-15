@@ -507,7 +507,7 @@ Now we can proceed to processing the main material.
 ## Stage 1: extracting frames from source video
 Full frame extraction to PNG format requires sufficient disk space. For example, in our case, a **FullHD** movie, approximately 2 hours long, with a frame rate of 23.976 (24000/1001), has ~**194000** frames, with a total volume of approximately ~**430GB** in **PNG** format.
 
-Looking ahead, there are ways to reduce the required disk space. Instead of extracting all frames at once, we can extract them in ranges - for example, frames from 0 to 10000, then from 10001 to 20000, and so on. I will write about this in another article.
+Looking ahead, there are ways to reduce the required disk space. Instead of extracting all frames at once, we can extract them in ranges - for example, frames from 0 to 10000, then from 10001 to 20000, and so on. I will write about this in [another article](https://peterplv.github.io/2026/01/15/stereo3d-script) (**UPD**: Done. Script and description at the link).
 
 We can also extract source frames in JPG format. I do not recommend this option, I tested it, the final image is noticeably worse, even if extracting JPG at the highest quality. However, after processing (before final encoding into 3D video), it is quite acceptable to save output files in JPG format, otherwise too much disk space will be required. For example, in the case of full 3D pairs, we would need 430x2 = ~**860GB** for output 3D frames in **PNG** format.
 
@@ -807,7 +807,7 @@ torch.cuda.empty_cache()
 <br>
 
 > Note:
-The extract_frames function in this script has nothing to do with "unpacking/extracting", as one might think from its name, because the frames are already unpacked and located in the "sw4frames/" folder. In this case, it only prepares frame batches for each thread in the amount of chunk_size. The name is preserved for compatibility with the other script, where frame extraction occurs in batches directly from the source video file without the need for preliminary exporting.
+The extract_frames function in this script has nothing to do with "unpacking/extracting", as one might think from its name, because the frames are already unpacked and located in the "sw4frames/" folder. In this case, it only prepares frame batches for each thread in the amount of chunk_size. The name is preserved for compatibility with the [other script](https://peterplv.github.io/2026/01/15/stereo3d-script), where frame extraction occurs in batches directly from the source video file without the need for preliminary exporting.
 
 <br>
 The script implements naive-multithreading. Naive, because these are purely preemptive threads that execute the same thing. This is done with the idea that at any given moment each thread can perform different tasks: load a file into memory, save a file to disk, compute a depth map (GPU), do parallax (CPU), etc. And even with such pseudo-multithreading, processing occurs significantly faster. Personally, I found **2–3** threads to be optimal; a larger number of threads does not affect processing speed in any way, but does increase GPU memory usage.
@@ -927,6 +927,8 @@ I have already watched the original Star Wars trilogy (episodes 4, 5, 6) in 3D. 
 <br>
 <br>
 ## Additional materials
+- Next article with the [new script and alternative solutions]
+(https://peterplv.github.io/2026/01/15/stereo3d-script)
 - Scripts from the article are available on my GitHub:  
 [https://github.com/peterplv/MakeAnythingStereo3D](https://github.com/peterplv/MakeAnythingStereo3D)
 - Link to a Google Drive with [examples and 3D GIFs](https://drive.google.com/drive/folders/1ovCMNJG-FLJcuOfE0Y-zuBsewUKpy_fy?usp=sharing)
