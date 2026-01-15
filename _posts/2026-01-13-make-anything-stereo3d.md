@@ -1,10 +1,10 @@
 ---
 layout: post
-title:  "How to make 3D version of any movie using DepthAnythingV2 and Parallax (StarWars4 as example)"
+title:  "How to Make 3D Version of Any Movie Using DepthAnythingV2 and Parallax (StarWars4 as Example)"
 date:   2026-01-13 19:15:00 +0300
 ---
 
-![C-3PO and R2-D2](/assets/images/2026-01-13-make-anything-stereo3d/starwars4_c3po_r2d2_title3d.gif)
+![C-3PO and R2-D2 in 3D](/assets/images/2026-01-13-make-anything-stereo3d/starwars4_c3po_r2d2_title3d.gif)
 *This is the result of the 2D to 3D conversion we will obtain*
 <br>
 <br>
@@ -480,8 +480,8 @@ So, let's run the script and get a stereo pair:
 Let’s make a 3D GIF to visually demonstrate the scene’s depth:
 <br>
 <br>
-![C-3PO and R2-D2 3d gif](/assets/images/2026-01-13-make-anything-stereo3d/starwars4_c3po_r2d2.gif)
-*C-3PO and R2-D2 are volumetric!*
+![C-3PO and R2-D2 in 3D](/assets/images/2026-01-13-make-anything-stereo3d/starwars4_c3po_r2d2.gif)
+*C-3PO and R2-D2 in 3D now!*
 <br>
 <br>
 <details markdown="1">
@@ -516,7 +516,7 @@ So, extract frames using the command:
 ffmpeg -i sw4.mkv "/home/user/sw4frames/file_%06d.png"
 ```
 
-<u>Here</u>:
+<u>Here</u>:  
 "-i sw4.mkv" - source file  
 "/home/user/sw4frames/" - path where the frames will be extracted; the folder must be created in advance  
 "file_%06d.png" - file mask, where %06d is a 6-digit counter starting from 000000; the files will be like "file_000000.png", "file_000001.png", etc.  
