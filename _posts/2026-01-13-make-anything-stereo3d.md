@@ -215,6 +215,9 @@ Or a colorized version of the depth map, for clarity (it won't be needed for our
 *Color depth map, from dark red (closer) to dark blue (farther)*
 <br>
 <br>
+> Related article: [Visual Comparison of Depth-Anything-V2 Models](https://peterplv.github.io/2026/01/16/depth-anything2-colors) →
+
+<br>
 Now, based on the obtained depth map, let’s make a 3D image, for example in the FOU (Full Over-Under) format:
 <details markdown="1">
 <summary>Code:</summary>
@@ -806,13 +809,13 @@ torch.cuda.empty_cache()
 </details>
 <br>
 
-> Note:
+> <u>Note</u>:
 The extract_frames function in this script has nothing to do with "unpacking/extracting", as one might think from its name, because the frames are already unpacked and located in the "sw4frames/" folder. In this case, it only prepares frame batches for each thread in the amount of chunk_size. The name is preserved for compatibility with the [other script](https://peterplv.github.io/2026/01/15/stereo3d-script), where frame extraction occurs in batches directly from the source video file without the need for preliminary exporting.
 
 <br>
 The script implements naive-multithreading. Naive, because these are purely preemptive threads that execute the same thing. This is done with the idea that at any given moment each thread can perform different tasks: load a file into memory, save a file to disk, compute a depth map (GPU), do parallax (CPU), etc. And even with such pseudo-multithreading, processing occurs significantly faster. Personally, I found **2–3** threads to be optimal; a larger number of threads does not affect processing speed in any way, but does increase GPU memory usage.
 
-> Note:
+> <u>Note</u>:
 This applies to working with already extracted frames. In the other script, where frames are extracted in batches rather than all at once, pseudo-multithreading works even better, and empirically I found **3–5 threads** to be optimal. This will be covered in another article.
 
 <br>
@@ -927,9 +930,10 @@ I have already watched the original Star Wars trilogy (episodes 4, 5, 6) in 3D. 
 <br>
 <br>
 ## Additional materials
-- Next article with the [new script and alternative solutions](https://peterplv.github.io/2026/01/15/stereo3d-script)
+- Next article with the [new script and alternative solutions](https://peterplv.github.io/2026/01/15/stereo3d-script) →
+- Related article on the [visual comparison of Depth-Anything-V2 models](https://peterplv.github.io/2026/01/16/depth-anything2-colors) →
 - Scripts from the article are available on my GitHub:  
 [https://github.com/peterplv/MakeAnythingStereo3D](https://github.com/peterplv/MakeAnythingStereo3D)
-- Link to a Google Drive with [examples and 3D GIFs](https://drive.google.com/drive/folders/1ovCMNJG-FLJcuOfE0Y-zuBsewUKpy_fy?usp=sharing)
+- Link to Google Drive with [examples and 3D GIFs](https://drive.google.com/drive/folders/1ovCMNJG-FLJcuOfE0Y-zuBsewUKpy_fy?usp=sharing)
 - Example 3D video in [HOU format](https://drive.google.com/file/d/1_d0UGC_srnGBT4eTdH7vp_hvLg5LGH4r/view?usp=sharing), suitable for viewing on most 3D TVs
 - Example 3D video in [FSBS format](https://drive.google.com/file/d/1WrFfK1KGKpi6kDBCSWO0YsHHSptSH56s/view?usp=sharing), suitable for viewing in VR headsets
