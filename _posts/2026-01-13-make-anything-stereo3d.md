@@ -16,7 +16,7 @@ For this, we will need:
 - GPU with CUDA support
 - [ffmpeg](https://www.ffmpeg.org/)
 - Python
-- [Depth-Anything-V2 library](https://github.com/DepthAnything/Depth%E2%80%91Anything%E2%80%91V2)
+- [Depth-Anything-V2 library](https://github.com/DepthAnything/Depth-Anything-V2)
 - A sufficient amount of disk space. For a typical FullHD 1080p movie with a duration of ~1.5–2 hours, about **400–500GB** will be required for the source frames in PNG format, and **150–200GB** for the final 3D frames in JPG format at the highest quality. In fact, the required volume for the source data can be reduced - frames can be extracted in parts, this will be discussed below.
 
 My configuration for this task:
