@@ -452,9 +452,9 @@ That's all, may the force be with you!
 - See the [main article](https://peterplv.github.io/2026/01/13/make-anything-stereo3d) for all key details
 - All 2D to 3D conversion scripts are available on my GitHub:  
 [https://github.com/peterplv/MakeAnythingStereo3D](https://github.com/peterplv/MakeAnythingStereo3D)
-- Link to Google Drive with [examples and 3D GIFs](https://drive.google.com/drive/folders/1ovCMNJG-FLJcuOfE0Y-zuBsewUKpy_fy?usp=sharing)
-- Example 3D video in [HOU format](https://drive.google.com/file/d/1_d0UGC_srnGBT4eTdH7vp_hvLg5LGH4r/view?usp=sharing), suitable for viewing on most 3D TVs
-- Example 3D video in [FSBS format](https://drive.google.com/file/d/1WrFfK1KGKpi6kDBCSWO0YsHHSptSH56s/view?usp=sharing), suitable for viewing in VR headsets
+- Link to Google Drive with [examples and 3D GIFs](https://drive.google.com/drive/folders/1ovCMNJG-FLJcuOfE0Y-zuBsewUKpy_fy)
+- Example 3D video in [HOU format](https://drive.google.com/file/d/1_d0UGC_srnGBT4eTdH7vp_hvLg5LGH4r/view), suitable for viewing on most 3D TVs
+- Example 3D video in [FSBS format](https://drive.google.com/file/d/1WrFfK1KGKpi6kDBCSWO0YsHHSptSH56s/view), suitable for viewing in VR headsets
 <br>
 
 ![Chewie and Han Solo in 3D](/assets/images/2026-01-15-stereo3d-script/starwars4_han_chewie_3d.gif)

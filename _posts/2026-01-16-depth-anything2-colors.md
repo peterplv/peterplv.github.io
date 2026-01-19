@@ -190,4 +190,4 @@ Thank you for your attention.
 
 ## Additional materials
 - See the [main article](https://peterplv.github.io/2026/01/13/make-anything-stereo3d) about how to use Depth-Anything-V2 to create stereoscopic 3D
-- Link to Google Drive with [all images](https://drive.google.com/drive/folders/16iN8W5RkV-THkJDGEe31LObv9GrxyMev?usp=sharing) from this article
+- Link to Google Drive with [all images](https://drive.google.com/drive/folders/16iN8W5RkV-THkJDGEe31LObv9GrxyMev) from this article

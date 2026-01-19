@@ -502,7 +502,7 @@ Let’s make a 3D GIF to visually demonstrate the scene’s depth:
 </details>
 <br>
 
-Other images can be viewed on my [Google Drive](https://drive.google.com/drive/folders/1ovCMNJG-FLJcuOfE0Y-zuBsewUKpy_fy?usp=sharing). There are source frames, depth maps, including color ones, and 3D GIFs for clarity.
+Other images can be viewed on my [Google Drive](https://drive.google.com/drive/folders/1ovCMNJG-FLJcuOfE0Y-zuBsewUKpy_fy). There are source frames, depth maps, including color ones, and 3D GIFs for clarity.
 
 Now we can proceed to processing the main material.
 <br>
@@ -562,7 +562,7 @@ frames_path_name = os.path.basename(os.path.normpath(frames_path))
 images3d_path = os.path.join(os.path.dirname(frames_path), f"{frames_path_name}_3d")
 os.makedirs(images3d_path, exist_ok=True)
 
-# Get a list of all files in the directory
+# List of source frames in the directory
 all_frames = [
     os.path.join(frames_path, file_name) 
     for file_name in os.listdir(frames_path) 
@@ -934,6 +934,6 @@ I have already watched the original Star Wars trilogy (episodes 4, 5, 6) in 3D. 
 - Related article on the [visual comparison of Depth-Anything-V2 models](https://peterplv.github.io/2026/01/16/depth-anything2-colors) →
 - Scripts from the article are available on my GitHub:  
 [https://github.com/peterplv/MakeAnythingStereo3D](https://github.com/peterplv/MakeAnythingStereo3D)
-- Link to Google Drive with [examples and 3D GIFs](https://drive.google.com/drive/folders/1ovCMNJG-FLJcuOfE0Y-zuBsewUKpy_fy?usp=sharing)
-- Example 3D video in [HOU format](https://drive.google.com/file/d/1_d0UGC_srnGBT4eTdH7vp_hvLg5LGH4r/view?usp=sharing), suitable for viewing on most 3D TVs
-- Example 3D video in [FSBS format](https://drive.google.com/file/d/1WrFfK1KGKpi6kDBCSWO0YsHHSptSH56s/view?usp=sharing), suitable for viewing in VR headsets
+- Link to Google Drive with [examples and 3D GIFs](https://drive.google.com/drive/folders/1ovCMNJG-FLJcuOfE0Y-zuBsewUKpy_fy)
+- Example 3D video in [HOU format](https://drive.google.com/file/d/1_d0UGC_srnGBT4eTdH7vp_hvLg5LGH4r/view), suitable for viewing on most 3D TVs
+- Example 3D video in [FSBS format](https://drive.google.com/file/d/1WrFfK1KGKpi6kDBCSWO0YsHHSptSH56s/view), suitable for viewing in VR headsets
