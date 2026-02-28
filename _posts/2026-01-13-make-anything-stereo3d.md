@@ -896,7 +896,7 @@ I use the **hevc_nvenc** codec - encoding occurs on the **GPU**, which is signif
 
 Command:
 ```bash
-ffmpeg -framerate 24000/1001 -i "/home/user/sw4frames_3d/file_%06d.jpg" -i sw4.mkv -c:v hevc_nvenc -cq 1 -preset p7 -color_range tv -colorspace bt709 -color_primaries bt709 -color_trc bt709 -pix_fmt yuv420p -map 0:v -map 1:a -c:a copy sw4_3d.mp4
+ffmpeg -framerate 24000/1001 -i "/home/user/sw4frames_3d/file_%06d.jpg" -i sw4.mkv -c:v hevc_nvenc -cq 1 -preset p7 -color_range tv -colorspace bt709 -color_primaries bt709 -color_trc bt709 -pix_fmt yuv420p -map 0:v -map 1:a -c:a copy sw4_3d.mkv
 ```
 
 <u>Here:</u>  
@@ -910,7 +910,7 @@ ffmpeg -framerate 24000/1001 -i "/home/user/sw4frames_3d/file_%06d.jpg" -i sw4.m
 "-pix_fmt yuv420p" - pixel color format; in most cases yuv420p is used  
 "-map 0:v" - specify using the folder with frames specified earlier for video  
 "-map 1:a -c:a copy" - specify using audio tracks from "-i sw4.mkv" without re-encoding; "-c:a copy" - direct copy  
-"sw4_3d.mp4" - output file name  
+"sw4_3d.mkv" - output file name  
 
 Wait for compilation and... enjoy watching.
 <br>
