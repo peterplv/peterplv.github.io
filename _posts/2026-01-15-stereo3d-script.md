@@ -19,7 +19,7 @@ I recommend reading the initial article first, as it contains all the key detail
 ```python
 import os
 import subprocess
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, wait, FIRST_COMPLETED
 from multiprocessing import Value
 import cv2
 import torch
@@ -43,7 +43,6 @@ os.makedirs(frames_path, exist_ok=True)
 os.makedirs(images3d_path, exist_ok=True)
 
 frame_counter = Value('i', 0) # Counter for naming frames
-threads_count = Value('i', 0) # Current threads counter to stay within max_threads limits
 
 chunk_size = 5000  # Number of files per thread
 max_threads = 3 # Maximum streams
@@ -55,7 +54,7 @@ device = torch.device('cuda')
 PARALLAX_SCALE = 15  # Recommended 10 to 20
 PARALLAX_METHOD = 1  # 1 or 2
 INPAINT_RADIUS  = 2  # For PARALLAX_METHOD = 2 only, recommended 2 to 5, optimum value 2-3
-INTERPOLATION_TYPE = cv2.INTER_LINEAR
+INTERPOLATION_TYPE = cv2.INTER_LINEAR  # INTER_NEAREST, INTER_AREA, INTER_LINEAR, INTER_CUBIC, INTER_LANCZOS4
 TYPE3D = "FOU"  # HSBS, FSBS, HOU, FOU
 LEFT_RIGHT = "LEFT"  # LEFT or RIGHT
 
@@ -237,6 +236,8 @@ def extract_frames(start_frame, end_frame):
     with frame_counter.get_lock():
         start_counter = frame_counter.value
         frame_counter.value += frames_to_process
+        
+    print(f"\n-- EXTRACTING FRAMES --\nFrames {start_frame} - {end_frame}\n")
 
     for chunk_start in range(start_frame, end_frame + 1, chunk_size):
         chunk_end = min(chunk_start + chunk_size - 1, end_frame)
@@ -254,11 +255,15 @@ def extract_frames(start_frame, end_frame):
             frame_number = chunk_start + i
             frame_path = extract_frames_path % frame_number
             extracted_frames.append(frame_path)
+            
+    print(f"\n-- FRAMES EXTRACTED --\nFrames {start_frame} - {end_frame}\n")
                 
     return extracted_frames
     
-def chunk_processing(extracted_frames):
+def chunk_processing(extracted_frames, start_frame, end_frame):
     ''' Start processing for each chunk '''
+    
+    print(f"\n-- START THE THREAD --\nFrames {start_frame} - {end_frame}\n")
     
     for frame_path in extracted_frames:
     
@@ -275,10 +280,15 @@ def chunk_processing(extracted_frames):
         depth = depth_processing(image)
 
         # Runing image3d_processing and getting a stereo pair for the image
-        if PARALLAX_METHOD == 1:
-            left_image, right_image = image3d_processing_method1(image, depth, height, width)
-        elif PARALLAX_METHOD == 2:
-            left_image, right_image = image3d_processing_method2(image, depth, height, width)
+        PARALLAX_FUNCTIONS = {
+            1: image3d_processing_method1,
+            2: image3d_processing_method2,
+        }
+
+        if PARALLAX_METHOD in (1, 2):
+            left_image, right_image = PARALLAX_FUNCTIONS[PARALLAX_METHOD](image, depth, height, width)  
+        else:
+            print(f"Set the correct {PARALLAX_METHOD}.")
 
         # Combining stereo pair into a common 3D image
         image3d = image3d_combining(left_image, right_image, height, width)
@@ -290,11 +300,10 @@ def chunk_processing(extracted_frames):
         # Deleting the source file
         os.remove(frame_path)
         
-    with threads_count.get_lock():
-        threads_count.value = max(1, threads_count.value - 1) # Decrease the counter after the current thread is finished
-
+    print(f"\n-- THREAD DONE --\nFrames {start_frame} - {end_frame}\n")
+        
 def run_processing():
-    ''' Global function of processing start taking into account multithreading '''
+    ''' The main function for starting processing threads '''
     
     # Total frames in video file
     total_frames = get_total_frames()
@@ -303,17 +312,30 @@ def run_processing():
     if isinstance(total_frames, int):
         with ThreadPoolExecutor(max_workers=max_threads) as executor:
             futures = []
+            
             for start_frame in range(0, total_frames, chunk_size):
                 end_frame = min(start_frame + chunk_size - 1, total_frames - 1)
+                
+                # 1. Extracting frames (waiting for task to complete before starting thread)
                 extracted_frames = extract_frames(start_frame, end_frame)
-                future = executor.submit(chunk_processing, extracted_frames)
+                
+                # 2. Starting thread for extracted frames
+                future = executor.submit(chunk_processing, extracted_frames, start_frame, end_frame)
                 futures.append(future)
-            
-            # Waiting for tasks to complete
+                
+                # 3. If thread count >= max_threads, wait for any thread to finish
+                if len(futures) >= max_threads:
+                    done, not_done = wait(futures, return_when=FIRST_COMPLETED)
+                    for f in done:
+                        f.result()  # if any thread fails, stop all processing
+                    futures = list(not_done)
+                    
+            # 4. Waiting for threads to complete
             for future in futures:
                 future.result()
+
+        print("DONE.")
         
-        print("DONE.")        
     else:
         print("First, determine the value of total_frames.")
 
@@ -367,21 +389,21 @@ ffmpeg -hwaccel cuda -i video.mkv -vf "select='between(n,5000,10000)'" -vsync 0 
 After complete processing, you'll need to "manually" compile the movie from the resulting frames, remembering to include audio tracks from the source file.
 Command for example:
 ```bash
-ffmpeg -r 24000/1001 -i "frames_3d/file_%06d.jpg" -i video.mkv -c:v hevc_nvenc -b:v 20M -minrate 10M -maxrate 30M -bufsize 60M -preset p7 -map 0:v -map 1:a -c:a copy -pix_fmt yuv420p video_3d.mkv
+ffmpeg -framerate 24000/1001 -i "frames_3d/file_%06d.jpg" -i video.mkv -c:v hevc_nvenc -cq 1 -preset p7 -color_range tv -colorspace bt709 -color_primaries bt709 -color_trc bt709 -pix_fmt yuv420p -map 0:v -map 1:a -c:a copy video_3d.mkv
 ```
 
 <u>Here:</u>  
-"-r 24000/1001" - source video frame rate, 24000/1001 = 23.976 frames per second  
+"-framerate 24000/1001" - source video frame rate, 24000/1001 = 23.976 frames per second  
 "-i "frames_3d/file_%06d.jpg"" - folder with 3D frames  
 "-i video.mkv" - source file with audio tracks  
-"-c:v hevc_nvenc" - codec  
-"-b:v 20M -minrate 10M -maxrate 30M" - variable bitrate, average value 20 Mbps, minimum 10 Mbps, maximum 30 Mbps  
-"-bufsize 60M" - buffer size for variable bitrate, it is recommended to use 2x of maxrate (2x30M = 60M), or you can omit it entirely and leave it to ffmpeg’s discretion  
-"-preset p7" - preset 7 for the hevc_nvenc codec, high quality  
+"-c:v hevc_nvenc" - NVIDIA GPU encoder (H.265)  
+"-cq 1 -preset p7" - high video quality  
+"-color_range tv" - color range; in most cases TV is used  
+"-colorspace bt709 -color_primaries bt709 -color_trc bt709" - video stream color settings; bt709 is standard for HD  
+"-pix_fmt yuv420p" - pixel color format; in most cases yuv420p is used  
 "-map 0:v" - specify using the folder with frames specified earlier for video  
-"-map 1:a -c:a copy" - specify using audio tracks from "-i video.mkv" without re-encoding, "-c:a copy" - direct copy  
-"-pix_fmt yuv420p" - pixel color format, recommended to use yuv420p for output video  
-"video_3d.mp4" - output file name  
+"-map 1:a -c:a copy" - specify using audio tracks from "-i sw4.mkv" without re-encoding; "-c:a copy" - direct copy  
+"video_3d.mkv" - output file name  
 
 The script can be modified to include this command for auto-execution after frame processing completes, for example:
 <details markdown="1">
@@ -389,21 +411,22 @@ The script can be modified to include this command for auto-execution after fram
 
 ```python
 compile_command = [
-	"ffmpeg",
-	"-r", "24000/1001",
-	"-i", "frames_3d/file_%06d.jpg",
-	"-i", "video.mkv",
-	"-c:v", "hevc_nvenc",
-	"-b:v", "20M",
-	"-minrate", "10M",
-	"-maxrate", "30M",
-	"-bufsize", "60M",
-	"-preset", "p7",
-	"-map", "0:v",
-	"-map", "1:a",
-	"-c:a", "copy",
-	"-pix_fmt", "yuv420p",
-	"video_3d.mkv"
+    "ffmpeg",
+    "-framerate", "24000/1001",
+    "-i", "frames_3d/file_%06d.jpg",
+    "-i", "video.mkv",
+    "-c:v", "hevc_nvenc",
+    "-cq", "1",
+    "-preset", "p7",
+    "-color_range", "tv",
+    "-colorspace", "bt709",
+    "-color_primaries", "bt709",
+    "-color_trc", "bt709",
+    "-pix_fmt", "yuv420p",
+    "-map", "0:v",
+    "-map", "1:a",
+    "-c:a", "copy",
+    "video_3d.mkv"
 ]
 
 subprocess.run(compile_command, check=True)

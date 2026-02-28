@@ -242,7 +242,7 @@ output_path = "/home/user/sw4test"  # Saving in the same folder, the filename wi
 PARALLAX_SCALE = 15  # Recommended 10 to 20
 PARALLAX_METHOD = 1  # 1 or 2
 INPAINT_RADIUS  = 2  # For PARALLAX_METHOD = 2 only, recommended 2 to 5, optimum value 2-3
-INTERPOLATION_TYPE = cv2.INTER_LINEAR
+INTERPOLATION_TYPE = cv2.INTER_LINEAR  # INTER_NEAREST, INTER_AREA, INTER_LINEAR, INTER_CUBIC, INTER_LANCZOS4
 TYPE3D = "FSBS"  # HSBS, FSBS, HOU, FOU
 LEFT_RIGHT = "LEFT"  # LEFT or RIGHT
 
@@ -371,10 +371,15 @@ height, width = image.shape[:2]
 
 # START PROCESSING
 # Runing image3d_processing and getting a stereo pair for the image
-if PARALLAX_METHOD == 1:
-    left_image, right_image = image3d_processing_method1(image, depth, height, width)
-elif PARALLAX_METHOD == 2:
-    left_image, right_image = image3d_processing_method2(image, depth, height, width)
+PARALLAX_FUNCTIONS = {
+	1: image3d_processing_method1,
+	2: image3d_processing_method2,
+}
+
+if PARALLAX_METHOD in (1, 2):
+	left_image, right_image = PARALLAX_FUNCTIONS[PARALLAX_METHOD](image, depth, height, width)  
+else:
+	print(f"Set the correct {PARALLAX_METHOD}.")
 
 # Combining stereo pair into a common 3D image
 image3d = image3d_combining(left_image, right_image, height, width)
@@ -541,7 +546,7 @@ Now we can proceed to creating 3D frames. Below is a script that does the follow
 
 ```python
 import os
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, wait, FIRST_COMPLETED
 from multiprocessing import Value
 import cv2
 import torch
@@ -570,7 +575,6 @@ all_frames = [
 ]
 
 frame_counter = Value('i', 0) # Counter for naming frames
-threads_count = Value('i', 0) # Current threads counter to stay within max_threads limits
 
 chunk_size = 1000  # Number of files per thread
 max_threads = 3 # Maximum streams
@@ -582,7 +586,7 @@ device = torch.device('cuda')
 PARALLAX_SCALE = 15  # Recommended 10 to 20
 PARALLAX_METHOD = 1  # 1 or 2
 INPAINT_RADIUS  = 2  # For PARALLAX_METHOD = 2 only, recommended 2 to 5, optimum value 2-3
-INTERPOLATION_TYPE = cv2.INTER_LINEAR
+INTERPOLATION_TYPE = cv2.INTER_LINEAR  # INTER_NEAREST, INTER_AREA, INTER_LINEAR, INTER_CUBIC, INTER_LANCZOS4
 TYPE3D = "FSBS"  # HSBS, FSBS, HOU, FOU
 LEFT_RIGHT = "LEFT"  # LEFT or RIGHT
 
@@ -734,12 +738,15 @@ def extract_frames(start_frame, end_frame):
         
     # List of files based on chunk size
     chunk_files = all_frames[start_frame:end_frame+1]  # end_frame inclusive
+    print(f"\n-- FRAMES FOR NEW THREAD --\nFrames {start_frame} - {end_frame}\n")
     
     return chunk_files
 
-def chunk_processing(extracted_frames):
+def chunk_processing(extracted_frames, start_frame, end_frame):
     ''' Start processing for each chunk '''
     
+    print(f"\n-- START THE THREAD --\nFrames {start_frame} - {end_frame}\n")
+	
     for frame_path in extracted_frames:
     
         # Extract the image name to save the 3D image later on
@@ -755,10 +762,15 @@ def chunk_processing(extracted_frames):
         depth = depth_processing(image)
 
         # Runing image3d_processing and getting a stereo pair for the image
-        if PARALLAX_METHOD == 1:
-            left_image, right_image = image3d_processing_method1(image, depth, height, width)
-        elif PARALLAX_METHOD == 2:
-            left_image, right_image = image3d_processing_method2(image, depth, height, width)
+        PARALLAX_FUNCTIONS = {
+            1: image3d_processing_method1,
+            2: image3d_processing_method2,
+        }
+        
+        if PARALLAX_METHOD in (1, 2):
+            left_image, right_image = PARALLAX_FUNCTIONS[PARALLAX_METHOD](image, depth, height, width)  
+        else:
+            print(f"Set the correct {PARALLAX_METHOD}.")
 
         # Combining stereo pair into a common 3D image
         image3d = image3d_combining(left_image, right_image, height, width)
@@ -770,30 +782,42 @@ def chunk_processing(extracted_frames):
         # Deleting the source file
         os.remove(frame_path)
         
-    with threads_count.get_lock():
-        threads_count.value = max(1, threads_count.value - 1) # Decrease the counter after the current thread is finished
+    print(f"\n-- THREAD DONE --\nFrames {start_frame} - {end_frame}\n")
     
 def run_processing():
-    ''' Global function of processing start taking into account multithreading '''
+    ''' The main function for starting processing threads '''
     
     # Total frames in video file
     total_frames = len(all_frames)
                         
     # Threads control
-    if total_frames:
+    if isinstance(total_frames, int):
         with ThreadPoolExecutor(max_workers=max_threads) as executor:
             futures = []
+            
             for start_frame in range(0, total_frames, chunk_size):
                 end_frame = min(start_frame + chunk_size - 1, total_frames - 1)
+                
+                # 1. Extracting frames (waiting for task to complete before starting thread)
                 extracted_frames = extract_frames(start_frame, end_frame)
-                future = executor.submit(chunk_processing, extracted_frames)
+                
+                # 2. Starting thread for extracted frames
+                future = executor.submit(chunk_processing, extracted_frames, start_frame, end_frame)
                 futures.append(future)
-            
-            # Waiting for tasks to complete
+                
+                # 3. If thread count reached >= max_threads, wait for any thread to finish
+                if len(futures) >= max_threads:
+                    done, not_done = wait(futures, return_when=FIRST_COMPLETED)
+                    for f in done:
+                        f.result()  # if any thread fails, stop all processing
+                    futures = list(not_done)
+                    
+            # 4. Waiting for threads to complete
             for future in futures:
                 future.result()
                 
         print("DONE.")
+        
     else:
         print("First, determine the value of total_frames.")
 
@@ -872,20 +896,20 @@ I use the **hevc_nvenc** codec - encoding occurs on the **GPU**, which is signif
 
 Command:
 ```bash
-ffmpeg -r 24000/1001 -i "/home/user/sw4frames_3d/file_%06d.jpg" -i sw4.mkv -c:v hevc_nvenc -b:v 20M -minrate 10M -maxrate 30M -bufsize 60M -preset p7 -map 0:v -map 1:a -c:a copy -pix_fmt yuv420p sw4_3d.mp4
+ffmpeg -framerate 24000/1001 -i "/home/user/sw4frames_3d/file_%06d.jpg" -i sw4.mkv -c:v hevc_nvenc -cq 1 -preset p7 -color_range tv -colorspace bt709 -color_primaries bt709 -color_trc bt709 -pix_fmt yuv420p -map 0:v -map 1:a -c:a copy sw4_3d.mp4
 ```
 
 <u>Here:</u>  
-"-r 24000/1001" - source video frame rate, 24000/1001 = 23.976 frames per second  
+"-framerate 24000/1001" - source video frame rate, 24000/1001 = 23.976 frames per second  
 "-i "/home/user/sw4frames_3d/file_%06d.jpg"" - folder with 3D frames  
 "-i sw4.mkv" - source file with audio tracks  
-"-c:v hevc_nvenc" - codec  
-"-b:v 20M -minrate 10M -maxrate 30M" - variable bitrate, average value 20 Mbps, minimum 10 Mbps, maximum 30 Mbps  
-"-bufsize 60M" - buffer size for variable bitrate, it is recommended to use 2x of maxrate (2x30M = 60M), or you can omit it entirely and leave it to ffmpeg’s discretion  
-"-preset p7" - preset 7 for the hevc_nvenc codec, high quality  
+"-c:v hevc_nvenc" - NVIDIA GPU encoder (H.265)  
+"-cq 1 -preset p7" - high video quality  
+"-color_range tv" - color range; in most cases TV is used  
+"-colorspace bt709 -color_primaries bt709 -color_trc bt709" - video stream color settings; bt709 is standard for HD  
+"-pix_fmt yuv420p" - pixel color format; in most cases yuv420p is used  
 "-map 0:v" - specify using the folder with frames specified earlier for video  
-"-map 1:a -c:a copy" - specify using audio tracks from "-i sw4.mkv" without re-encoding, "-c:a copy" - direct copy  
-"-pix_fmt yuv420p" - pixel color format, recommended to use yuv420p for output video  
+"-map 1:a -c:a copy" - specify using audio tracks from "-i sw4.mkv" without re-encoding; "-c:a copy" - direct copy  
 "sw4_3d.mp4" - output file name  
 
 Wait for compilation and... enjoy watching.
