@@ -243,7 +243,7 @@ PARALLAX_SCALE = 15  # Recommended 10 to 20
 PARALLAX_METHOD = 1  # 1 or 2
 INPAINT_RADIUS  = 2  # For PARALLAX_METHOD = 2 only, recommended 2 to 5, optimum value 2-3
 INTERPOLATION_TYPE = cv2.INTER_LINEAR  # INTER_NEAREST, INTER_AREA, INTER_LINEAR, INTER_CUBIC, INTER_LANCZOS4
-TYPE3D = "FSBS"  # HSBS, FSBS, HOU, FOU
+TYPE3D = "FOU"  # HSBS, FSBS, HOU, FOU
 LEFT_RIGHT = "LEFT"  # LEFT or RIGHT
 
 # 0 - if there's no need to change frame size
@@ -587,7 +587,7 @@ PARALLAX_SCALE = 15  # Recommended 10 to 20
 PARALLAX_METHOD = 1  # 1 or 2
 INPAINT_RADIUS  = 2  # For PARALLAX_METHOD = 2 only, recommended 2 to 5, optimum value 2-3
 INTERPOLATION_TYPE = cv2.INTER_LINEAR  # INTER_NEAREST, INTER_AREA, INTER_LINEAR, INTER_CUBIC, INTER_LANCZOS4
-TYPE3D = "FSBS"  # HSBS, FSBS, HOU, FOU
+TYPE3D = "FOU"  # HSBS, FSBS, HOU, FOU
 LEFT_RIGHT = "LEFT"  # LEFT or RIGHT
 
 # 0 - if there's no need to change frame size
