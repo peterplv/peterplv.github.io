@@ -384,7 +384,7 @@ ffmpeg -hwaccel cuda -i video.mkv -vf "select='between(n,5000,10000)'" -vsync 0 
 "-vf "select='between(n,5000,10000)'"" - range filter, from frame 5000 to 10000  
 "-vsync 0" - disable timestamp synchronization, extract frames as-is  
 "-start_number" - naming counter, starting from 5000  
-""extracted_frames/file_%06d.png"" - path where frames will be extracted and file mask, where %06d is a 6-digit counter, files will be like "file_005000.png", "file_005001.png", etc.  
+"extracted_frames/file_%06d.png" - path where frames will be extracted and file mask, where %06d is a 6-digit counter, files will be like "file_005000.png", "file_005001.png", etc.  
 
 After complete processing, you'll need to "manually" compile the movie from the resulting frames, remembering to include audio tracks from the source file.
 Command for example:
