@@ -389,7 +389,7 @@ ffmpeg -hwaccel cuda -i video.mkv -vf "select='between(n,5000,10000)'" -vsync 0 
 After complete processing, you'll need to "manually" compile the movie from the resulting frames, remembering to include audio tracks from the source file.
 Command for example:
 ```bash
-ffmpeg -framerate 24000/1001 -i "frames_3d/file_%06d.jpg" -i video.mkv -c:v hevc_nvenc -cq 1 -preset p7 -color_range tv -colorspace bt709 -color_primaries bt709 -color_trc bt709 -pix_fmt yuv420p -map 0:v -map 1:a -c:a copy video_3d.mkv
+ffmpeg -framerate 24000/1001 -i "frames_3d/file_%06d.jpg" -i video.mkv -c:v hevc_nvenc -cq 1 -preset p7 -colorspace bt709 -color_primaries bt709 -color_trc bt709 -color_range tv -pix_fmt yuv420p -map 0:v -map 1:a -c:a copy video_3d.mkv
 ```
 
 <u>Here:</u>  
@@ -398,9 +398,9 @@ ffmpeg -framerate 24000/1001 -i "frames_3d/file_%06d.jpg" -i video.mkv -c:v hevc
 "-i video.mkv" - source file with audio tracks  
 "-c:v hevc_nvenc" - NVIDIA GPU encoder (H.265)  
 "-cq 1 -preset p7" - high video quality  
-"-color_range tv" - color range; in most cases TV is used  
-"-colorspace bt709 -color_primaries bt709 -color_trc bt709" - video stream color settings; bt709 is standard for HD  
-"-pix_fmt yuv420p" - pixel color format; in most cases yuv420p is used  
+"-colorspace bt709 -color_primaries bt709 -color_trc bt709" - set color parameters according to the BT.709 standard for HD video  
+"-color_range tv" - pixel color format, yuv420p for maximum compatibility  
+"-pix_fmt yuv420p" - standard (limited) range for video, as expected by codecs and players, for maximum compatibility and correct colors  
 "-map 0:v" - specify using the folder with frames specified earlier for video  
 "-map 1:a -c:a copy" - specify using audio tracks from "-i sw4.mkv" without re-encoding; "-c:a copy" - direct copy  
 "video_3d.mkv" - output file name  
@@ -418,10 +418,10 @@ compile_command = [
     "-c:v", "hevc_nvenc",
     "-cq", "1",
     "-preset", "p7",
-    "-color_range", "tv",
     "-colorspace", "bt709",
     "-color_primaries", "bt709",
     "-color_trc", "bt709",
+    "-color_range", "tv",
     "-pix_fmt", "yuv420p",
     "-map", "0:v",
     "-map", "1:a",

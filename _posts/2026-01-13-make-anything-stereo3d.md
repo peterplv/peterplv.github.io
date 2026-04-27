@@ -905,9 +905,9 @@ ffmpeg -framerate 24000/1001 -i "/home/user/sw4frames_3d/file_%06d.jpg" -i sw4.m
 "-i sw4.mkv" - source file with audio tracks  
 "-c:v hevc_nvenc" - NVIDIA GPU encoder (H.265)  
 "-cq 1 -preset p7" - high video quality  
-"-color_range tv" - color range; in most cases TV is used  
-"-colorspace bt709 -color_primaries bt709 -color_trc bt709" - video stream color settings; bt709 is standard for HD  
-"-pix_fmt yuv420p" - pixel color format; in most cases yuv420p is used  
+"-colorspace bt709 -color_primaries bt709 -color_trc bt709" - set color parameters according to the BT.709 standard for HD video  
+"-color_range tv" - pixel color format, yuv420p for maximum compatibility  
+"-pix_fmt yuv420p" - standard (limited) range for video, as expected by codecs and players, for maximum compatibility and correct colors  
 "-map 0:v" - specify using the folder with frames specified earlier for video  
 "-map 1:a -c:a copy" - specify using audio tracks from "-i sw4.mkv" without re-encoding; "-c:a copy" - direct copy  
 "sw4_3d.mkv" - output file name  
