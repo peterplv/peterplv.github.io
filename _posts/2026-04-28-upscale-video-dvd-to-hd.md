@@ -497,7 +497,7 @@ Once all frames have been upscaled, all that's left is to encode the final video
 
 The command:  
 ```bash
-ffmpeg -r 24000/1001 -i "/home/user/frames_upscaled/file_%06d.jpg" -i "/home/user/audio_track_eng.ac3" -i "/home/user/audio_track_rus.ac3" -c:v hevc_nvenc -b:v 10M -minrate 5M -maxrate 15M -bufsize 30M -preset p7 -colorspace bt709 -color_primaries bt709 -color_trc bt709 -color_range tv -pix_fmt yuv420p -map 0:v -map 1:a -map 2:a -metadata:s:a:0 title="English" -metadata:s:a:0 language=eng -metadata:s:a:1 title="Russian" -metadata:s:a:1 language=rus -c:a copy -pix_fmt yuv420p video_hd.mkv
+ffmpeg -r 24000/1001 -i "/home/user/frames_upscaled/file_%06d.jpg" -i "/home/user/audio_track_eng.ac3" -i "/home/user/audio_track_rus.ac3" -c:v hevc_nvenc -b:v 10M -minrate 5M -maxrate 15M -bufsize 30M -preset p7 -colorspace bt709 -color_primaries bt709 -color_trc bt709 -color_range tv -pix_fmt yuv420p -map 0:v -map 1:a -map 2:a -metadata:s:a:0 title="English" -metadata:s:a:0 language=eng -metadata:s:a:1 title="Russian" -metadata:s:a:1 language=rus -c:a copy -disposition:a:0 default video_hd.mkv
 ```
 
 <u>Here:</u>  
@@ -514,6 +514,7 @@ ffmpeg -r 24000/1001 -i "/home/user/frames_upscaled/file_%06d.jpg" -i "/home/use
 "-map 0:v -map 1:a -map 2:a" - stream mapping: video from frames, audio track 1, audio track 2  
 "-metadata:s:a:0 title="English" ... language=eng ..." - write language metadata for audio tracks  
 "-c:a copy" - copy audio without re-encoding  
+"-disposition:a:0 default" - set audio_track_eng.ac3 as default  
 "video_hd.mkv" - output filename in MKV container  
 
 Wait for encoding to finish and you're done.
