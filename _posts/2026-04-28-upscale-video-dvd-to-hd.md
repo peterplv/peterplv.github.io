@@ -533,8 +533,6 @@ Links to before/after frame samples and a before/after video clip are in the Add
 
 Observed drawbacks: Grass and trees don't look very realistic - it's often apparent that the network reconstructed them with some creative liberty. Occasionally you can spot synthetic-looking artifacts in specific details or objects, but it's not frequent and only noticeable if you look closely. In general, the blurrier the source image or individual objects within it, the worse the upscale result - synthetic artifacts will be more apparent.
 
-There was also occasional unnatural flickering in dark areas of the video that wasn't present in the source. In that case you can try a different model, or consider additional post-processing for those segments - though that significantly complicates the workflow and adds even more processing time.
-
 In general, normal well-authored DVDs upscale well, where the original detail is good. Heavily compressed video with low detail and a soft/blurry picture upscales poorly. But again, if the source wasn't heavily compressed, the upscale will most likely produce good results.
 <br>
 <br>
