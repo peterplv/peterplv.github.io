@@ -508,7 +508,7 @@ ffmpeg -r 24000/1001 -i "/home/user/frames_upscaled/file_%06d.jpg" -i "/home/use
 "-b:v 10M -minrate 5M -maxrate 15M" - variable bitrate: average 10 Mbps, minimum 5 Mbps, maximum 15 Mbps  
 "-bufsize 30M" - buffer size for variable bitrate; recommended to set at 2x maxrate (2x15M=30M), or omit to let ffmpeg decide  
 "-preset p7" - preset 7 for hevc_nvenc, high quality  
-"-colorspace bt709 -color_primaries bt709 -color_trc bt709" - set color parameters according to BT.709 standard for HD video  
+"-colorspace smpte170m -color_primaries smpte170m -color_trc smpte170m" - set color parameters according to BT.601 NTSC from source  
 "-color_range tv" - standard (limited) range for video, expected by codecs and players, maximum compatibility and correct colors  
 "-pix_fmt yuv420p" - pixel color format, yuv420p for maximum compatibility  
 "-map 0:v -map 1:a -map 2:a" - stream mapping: video from frames, audio track 1, audio track 2  
