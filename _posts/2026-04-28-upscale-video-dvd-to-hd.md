@@ -97,7 +97,7 @@ pip install torch torchvision Pillow
 pip install spandrel
 ```
 
-**Downloading the model**
+**Downloading the model**  
 Available SwinIR models at the link:
 [https://github.com/JingyunLiang/SwinIR/releases](https://github.com/JingyunLiang/SwinIR/releases)
 
