@@ -538,6 +538,6 @@ In general, normal well-authored DVDs upscale well, where the original detail is
 <br>
 ## Additional Materials
 - Script from the article is available on my GitHub:  
-[https://github.com/peterplv/PythonVideoUpscaler](https://github.com/peterplv/PythonVideoUpscaler)
+[https://github.com/peterplv/PythonNeiroUpscaler](https://github.com/peterplv/PythonNeiroUpscaler)
 - Before/after frame samples on my [Google Drive](https://drive.google.com/drive/folders/12w6gSglfkN729GKMh3YTdsuhD6bGDotn). There are also examples of 4x upscaled images
 - Video example: [original](https://drive.google.com/file/d/1V4kmpTviV6dJ0K3UUsgcU9bA5EGT4kIs/view) and [upscaled](https://drive.google.com/file/d/1f_rKmmLI99T7HzJlyXinUEoT0rvbsMaR/view)
