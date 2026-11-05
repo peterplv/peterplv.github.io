@@ -6,9 +6,9 @@ permalink: /about/
 
 My name is Peter. I work in AI and write about it. My focus is on LLM, RAG, Agents, Computer Vision, Neural Networks in Production, Search Engines, Big Data Processing and Automation.
 
-Mail: peterplv101 (gmail.com).
-Medium: [https://medium.com/@peterplv](https://medium.com/@peterplv).
-X/Twitter: [https://x.com/peterplv1](https://x.com/peterplv1).
+Mail: peterplv101 (gmail.com).  
+Medium: [https://medium.com/@peterplv](https://medium.com/@peterplv).  
+X/Twitter: [https://x.com/peterplv1](https://x.com/peterplv1).  
 
 Welcome!
 <svg class="about-emoji" width="40" height="40" viewBox="0 0 32 32" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
