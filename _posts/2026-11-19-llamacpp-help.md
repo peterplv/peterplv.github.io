@@ -42,4 +42,4 @@ Speculative decoding parameters. Settings related to using draft models.
 <br>
 Parameters specific to a particular utility. For example, **llama-server** has its own parameters for the server side. These parameters are not available in **llama-cli**, **llama-completion**, and so on. Each utility has its own specific parameters, and the number varies between utilities. llama-server has a significant share of them. You might take the word "specific" to mean "rarely used", but that is not true. This category includes, among others, very important parameters needed for regular work.
 
-So, link to the reference: [https://github.com/peterplv/llama.cpp.help](https://github.com/peterplv/llama.cpp.help)
+So, link to the reference: [https://github.com/peterplv/llama.cpp.help](https://github.com/peterplv/llama.cpp.help).
