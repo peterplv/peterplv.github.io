@@ -7,7 +7,7 @@ date:   2026-11-19 15:13:00 +0300
 ![llama.cpp parameters guide](/assets/images/2026-11-19-llamacpp-help/llamacpp_parameters_guide.jpg)
 <br>
 <br>
-A reference for the main **llama.cpp** commands and parameters. It covers the main inference utilities: llama-cli, llama-completion, and llama-server. It includes all the commands and parameters you can get by running, for example, "llama-cli \-\-help" or "llama-server \-\-help", in the same order. I went through all the arguments one by one and tried to write short but, I hope, clear comments for each of them.
+A [reference for the main llama.cpp commands and parameters](https://github.com/peterplv/llama.cpp.help). It covers the main inference utilities: llama-cli, llama-completion, and llama-server. It includes all the commands and parameters you can get by running, for example, "llama-cli \-\-help" or "llama-server \-\-help", in the same order. I went through all the arguments one by one and tried to write short but, I hope, clear comments for each of them.
 
 I don't use all of **llama.cpp**'s features in my work, and I have only a weak (maybe average) understanding of many of them, so I had to work through most of the parameters with the help of AI. But this was not simple copy-pasting of **LLM** answers. I tried to understand how each parameter works: how it is built, what it affects, where it comes from, and so on. Only after it became more or less clear (more rather than less) did I write short comments in my own words, as I understood them. I also had to read the source code to understand how some of the less obvious parameters work.
 
