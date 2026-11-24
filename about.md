@@ -9,7 +9,6 @@ My name is Peter. I work in AI and write about it. My focus is on LLM, RAG, Agen
 
 Mail: peterplv101 (gmail.com).<br>
 Medium: [https://medium.com/@peterplv](https://medium.com/@peterplv).<br>
-X/Twitter: [https://x.com/peterplv1](https://x.com/peterplv1).<br>
 GitHub: [https://github.com/peterplv1](https://github.com/peterplv)<br>
 
 Welcome!
